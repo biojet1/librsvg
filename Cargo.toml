@@ -71,6 +71,7 @@ string_cache = "0.8.0"
 tinyvec = { version = "1.2.0", features = ["alloc"] }
 url = "2"
 xml5ever = "0.16.1"
+cairo-sys-rs = "0.14.0"
 
 [dev-dependencies]
 assert_cmd = "1.0.1"
