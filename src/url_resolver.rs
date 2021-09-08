@@ -35,60 +35,60 @@ impl UrlResolver {
             .parse(href)
             .map_err(AllowedUrlError::UrlParseError)?;
 
-        // Allow loads of data: from any location
-        if url.scheme() == "data" {
-            return Ok(AllowedUrl(url));
-        }
+//         // Allow loads of data: from any location
+//         if url.scheme() == "data" {
+           return Ok(AllowedUrl(url));
+//         }
 
-        // All other sources require a base url
-        if self.base_url.is_none() {
-            return Err(AllowedUrlError::BaseRequired);
-        }
+//         // All other sources require a base url
+//         if self.base_url.is_none() {
+//             return Err(AllowedUrlError::BaseRequired);
+//         }
 
-        let base_url = self.base_url.as_ref().unwrap();
+//         let base_url = self.base_url.as_ref().unwrap();
 
-        // Deny loads from differing URI schemes
-        if url.scheme() != base_url.scheme() {
-            return Err(AllowedUrlError::DifferentUriSchemes);
-        }
+//         // Deny loads from differing URI schemes
+//         if url.scheme() != base_url.scheme() {
+//             return Err(AllowedUrlError::DifferentUriSchemes);
+//         }
 
-        // resource: is allowed to load anything from other resources
-        if url.scheme() == "resource" {
-            return Ok(AllowedUrl(url));
-        }
+//         // resource: is allowed to load anything from other resources
+//         if url.scheme() == "resource" {
+//             return Ok(AllowedUrl(url));
+//         }
 
-        // Non-file: isn't allowed to load anything
-        if url.scheme() != "file" {
-            return Err(AllowedUrlError::DisallowedScheme);
-        }
+//         // Non-file: isn't allowed to load anything
+//         if url.scheme() != "file" {
+//             return Err(AllowedUrlError::DisallowedScheme);
+//         }
 
-        // We have two file: URIs.  Now canonicalize them (remove .. and symlinks, etc.)
-        // and see if the directories match
+//         // We have two file: URIs.  Now canonicalize them (remove .. and symlinks, etc.)
+//         // and see if the directories match
 
-        let url_path = url
-            .to_file_path()
-            .map_err(|_| AllowedUrlError::InvalidPath)?;
-        let base_path = base_url
-            .to_file_path()
-            .map_err(|_| AllowedUrlError::InvalidPath)?;
+//         let url_path = url
+//             .to_file_path()
+//             .map_err(|_| AllowedUrlError::InvalidPath)?;
+//         let base_path = base_url
+//             .to_file_path()
+//             .map_err(|_| AllowedUrlError::InvalidPath)?;
 
-        let base_parent = base_path.parent();
-        if base_parent.is_none() {
-            return Err(AllowedUrlError::BaseIsRoot);
-        }
+//         let base_parent = base_path.parent();
+//         if base_parent.is_none() {
+//             return Err(AllowedUrlError::BaseIsRoot);
+//         }
 
-        let base_parent = base_parent.unwrap();
+//         let base_parent = base_parent.unwrap();
 
-        let url_canon =
-            canonicalize(&url_path).map_err(|_| AllowedUrlError::CanonicalizationError)?;
-        let parent_canon =
-            canonicalize(&base_parent).map_err(|_| AllowedUrlError::CanonicalizationError)?;
+//         let url_canon =
+//             canonicalize(&url_path).map_err(|_| AllowedUrlError::CanonicalizationError)?;
+//         let parent_canon =
+//             canonicalize(&base_parent).map_err(|_| AllowedUrlError::CanonicalizationError)?;
 
-        if url_canon.starts_with(parent_canon) {
-            Ok(AllowedUrl(url))
-        } else {
-            Err(AllowedUrlError::NotSiblingOrChildOfBaseFile)
-        }
+//         if url_canon.starts_with(parent_canon) {
+//             Ok(AllowedUrl(url))
+//         } else {
+//             Err(AllowedUrlError::NotSiblingOrChildOfBaseFile)
+//         }
     }
 }
 
